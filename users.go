@@ -27,7 +27,7 @@ type UsersGetPricingResult struct {
 	} `xml:"ProductCategory"`
 }
 
-func (client *Client) UsersGetPricing(productType string) ([]UsersGetPricingResult, error) {
+func (client *Client) UsersGetPricing(productType, productCategory, productName string) ([]UsersGetPricingResult, error) {
 	requestInfo := &ApiRequest{
 		command: usersGetPricing,
 		method:  "GET",
@@ -35,6 +35,12 @@ func (client *Client) UsersGetPricing(productType string) ([]UsersGetPricingResu
 	}
 
 	requestInfo.params.Set("ProductType", productType)
+	if len(productCategory) > 0 && productCategory != "*" {
+		requestInfo.params.Set("ProductCategory", productCategory)
+	}
+	if len(productName) > 0 && productName != "*" {
+		requestInfo.params.Set("ProductName", productName)
+	}
 	resp, err := client.do(requestInfo)
 	if err != nil {
 		return nil, err
